@@ -23,6 +23,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
 }
 
@@ -68,5 +72,14 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
+    //.glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation ("com.github.bumptech.glide:recyclerview-integration:4.11.0") {
+        // Excludes the support library because it's already included by Glide.
+        transitive = false
+    }
+
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }

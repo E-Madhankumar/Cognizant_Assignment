@@ -14,10 +14,9 @@ import javax.inject.Singleton
 @Module
 open class AppModule {
 
-
     @Singleton
     @Provides
-    open fun provideRetrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
+    open fun provideApi() = Retrofit.Builder()
         .baseUrl("https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/")
         .client(ApiHelper().getOkHttpClient)
         .addCallAdapterFactory(CoroutineCallAdapterFactory())

@@ -11,9 +11,10 @@ class ApiHelper {
     val getOkHttpClient = OkHttpClient.Builder().apply {
         connectTimeout(15, TimeUnit.SECONDS)
         readTimeout(15, TimeUnit.SECONDS)
+//        addInterceptor(loggingInterceptor)
     }.build()
 
-    val interceptor = HttpLoggingInterceptor().apply {
+    val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
