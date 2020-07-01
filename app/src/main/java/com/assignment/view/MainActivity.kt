@@ -1,14 +1,10 @@
 package com.assignment.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.assignment.R
 import com.assignment.di.factory.ViewModelProviderFactory
 import com.assignment.view.adapter.FactsAdapter
@@ -25,15 +21,14 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         viewModel = ViewModelProvider(this,viewModelProveder).get(MainViewModel::class.java)
         initObservable()
         initRecyclerView()
         checkSavedState(savedInstanceState)
     }
 
-    fun initObservable(){
-        viewModel.getPosterObservable()?.observe(this, Observer {
+    private fun initObservable(){
+        viewModel.getPosterObservable().observe(this, Observer {
             adapter?.update(it)
         })
 
@@ -42,7 +37,7 @@ class MainActivity : DaggerAppCompatActivity() {
         })
     }
 
-    fun initRecyclerView(){
+    private fun initRecyclerView(){
         adapter = FactsAdapter(mutableListOf())
         rc_facts?.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
@@ -50,7 +45,7 @@ class MainActivity : DaggerAppCompatActivity() {
         rc_facts?.adapter = adapter
         getFacts()
     }
-    fun checkSavedState(savedInstanceState:Bundle?){
+    private fun checkSavedState(savedInstanceState:Bundle?){
         if(savedInstanceState != null) {
             savedInstanceState.getString("rc_position")?.let {
                 rc_facts?.layoutManager?.scrollToPosition(it.toInt())
