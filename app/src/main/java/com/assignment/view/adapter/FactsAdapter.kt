@@ -35,6 +35,7 @@ class FactsAdapter(var context: Context,private var itemList: MutableList<RowsIt
             title.text = item.title
             description.text = item.description
             if(item.imageHref !=null){
+                poster?.visibility = View.VISIBLE
                 Glide
                     .with(context)
                     .asBitmap()
@@ -42,8 +43,6 @@ class FactsAdapter(var context: Context,private var itemList: MutableList<RowsIt
                     .load(item.imageHref).placeholder(R.mipmap.link_broken)
                     .error(R.mipmap.link_broken)
                     .into(poster)
-            }else{
-                poster?.visibility = View.GONE
             }
         }
     }
@@ -59,6 +58,10 @@ class FactsAdapter(var context: Context,private var itemList: MutableList<RowsIt
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(itemList[position])
+    }
+    fun clear(){
+        itemList.clear();
+        notifyDataSetChanged();
     }
 
     fun update(moreContentItemList: MutableList<RowsItem>){
