@@ -39,6 +39,8 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun initObservable(){
         viewModel.getPosterObservable().observe(this, Observer {
+            adapter?.clear()
+            swipeContainer?.isRefreshing = false
             adapter?.update(it.filter { it.title!=null } as MutableList<RowsItem>)
         })
 
@@ -56,6 +58,13 @@ class MainActivity : DaggerAppCompatActivity() {
         rc_facts?.setItemViewCacheSize(10)
         rc_facts?.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         getFacts()
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light)
+        swipeContainer?.setOnRefreshListener {
+            getFacts()
+        }
     }
     private fun checkSavedState(savedInstanceState:Bundle?){
         if(savedInstanceState != null) {
