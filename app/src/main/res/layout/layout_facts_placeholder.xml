@@ -37,7 +37,9 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginEnd="@dimen/key_line_4"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_description"
         app:srcCompat="@mipmap/link_broken" />
 </androidx.constraintlayout.widget.ConstraintLayout>
