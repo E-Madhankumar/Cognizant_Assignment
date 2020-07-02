@@ -21,8 +21,11 @@ import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.layout_facts_placeholder.view.*
 
 
-class FactsAdapter(private var itemList: MutableList<RowsItem>) : RecyclerView.Adapter<FactsAdapter.ViewHolder>() {
+class FactsAdapter(var context: Context,private var itemList: MutableList<RowsItem>) : RecyclerView.Adapter<FactsAdapter.ViewHolder>() {
 
+    init {
+        PreLoadImages(itemList)
+    }
     class ViewHolder(val context: Context, view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.tv_title
         val poster: ImageView = view.iv_imageHref
@@ -35,8 +38,9 @@ class FactsAdapter(private var itemList: MutableList<RowsItem>) : RecyclerView.A
                 Glide
                     .with(context)
                     .asBitmap()
-                    .load(item.imageHref)
-                    .error(R.drawable.ic_launcher_background)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(item.imageHref).placeholder(R.mipmap.link_broken)
+                    .error(R.mipmap.link_broken)
                     .into(poster)
             }else{
                 poster?.visibility = View.GONE
@@ -58,9 +62,19 @@ class FactsAdapter(private var itemList: MutableList<RowsItem>) : RecyclerView.A
     }
 
     fun update(moreContentItemList: MutableList<RowsItem>){
+        PreLoadImages(moreContentItemList)
         val index = itemList.size
         itemList = moreContentItemList
         notifyItemInserted(index)
+    }
+
+    fun PreLoadImages(mItemList: MutableList<RowsItem>){
+
+        mItemList.forEach {
+            it?.imageHref?.let {url ->
+                Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
+            }
+        }
     }
 
 }

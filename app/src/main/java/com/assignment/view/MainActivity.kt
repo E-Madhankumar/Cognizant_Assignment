@@ -4,19 +4,29 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.assignment.R
 import com.assignment.di.factory.ViewModelProviderFactory
+import com.assignment.model.RowsItem
+import com.assignment.util.ImagePreloader
 import com.assignment.view.adapter.FactsAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.ListPreloader.PreloadModelProvider
+import com.bumptech.glide.ListPreloader.PreloadSizeProvider
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
+import com.bumptech.glide.util.FixedPreloadSizeProvider
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+
 
 class MainActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var viewModelProveder: ViewModelProviderFactory
     lateinit var viewModel: MainViewModel
     var adapter: FactsAdapter? = null
+    var items:MutableList<RowsItem> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +39,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun initObservable(){
         viewModel.getPosterObservable().observe(this, Observer {
-            adapter?.update(it)
+            adapter?.update(it.filter { it.title!=null } as MutableList<RowsItem>)
         })
 
         viewModel.getErrorObserable().observe(this, Observer {
@@ -38,11 +48,13 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun initRecyclerView(){
-        adapter = FactsAdapter(mutableListOf())
+        adapter = FactsAdapter(this,mutableListOf())
         rc_facts?.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
         rc_facts?.setHasFixedSize(true)
         rc_facts?.adapter = adapter
+        rc_facts?.setItemViewCacheSize(10)
+        rc_facts?.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         getFacts()
     }
     private fun checkSavedState(savedInstanceState:Bundle?){
@@ -56,4 +68,5 @@ class MainActivity : DaggerAppCompatActivity() {
     fun getFacts(){
         viewModel.getFacts()
     }
+
 }
